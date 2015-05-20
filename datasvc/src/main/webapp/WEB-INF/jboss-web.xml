@@ -1,0 +1,3 @@
+<jboss-web>
+	<context-root>svc</context-root>
+</jboss-web>
