@@ -17,7 +17,7 @@
     
    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"/>
    
-   <bean class="org.springframework.web.portlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
+<!--    <bean class="org.springframework.web.portlet.mvc.annotation.DefaultAnnotationHandlerMapping"/> -->
    
    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
 	  <property name="order" value="1" />
