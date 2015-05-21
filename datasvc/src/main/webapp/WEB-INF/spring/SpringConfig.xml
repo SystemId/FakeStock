@@ -13,10 +13,34 @@
                            
 	<context:annotation-config/>
 	
+	<bean id="deployProperties" class="org.springframework.beans.factory.PropertiesFactoryBean" 
+		p:location="/WEB-INF/spring/spring-data.properties" />
+		
+	<context:property-placeholder properties-ref="deployProperties" />
 	
+	<bean id="stockDataSource" class="com.jolbox.bonecp.BoneCPDatasource" destroy-method="close" 
+	p:driver-class="org.postgresql.Driver"
+	p:jdbc-url="${dataJdbcURL}"
+	p:username="${dataJdbcURL}"
+	p:password="${dataJdbcPassword}"
+	p:idle-connection-test-period="60"
+	p:idle-max-age="240"
+	p:max-connections-per-partition="12"
+	p:min-connections-per-partition="5"
+	p:partition-count="3"
+	p:acquire-increment="5"
+	p:statements-cache-size="100"
+	p:release-helper-threads="3"
+	/>
 
-                           
-                           
+	<bean id="stockDataTemplate" class="org.springframework.jdbc.core.JdbcTemplate"
+		p:data-source-ref="stockDataSource" p:fetch-size="100" />
+
+	<bean id="stockDataDAO" class="com.ani.stock.datasvc.dao.impl.StockDaoImpl"
+		p:Stock-Dao-ref="StockDaoImpl" />
+
+	<bean id="stockDataService" class="com.ani.stock.datasvc.service.impl.StockServiceImpl"
+		p:Stock-Service-ref="StockServiceImpl" />	                     
                            
                            
                            
