@@ -1,5 +1,11 @@
 package com.ani.stock.datasvc.service;
 
-public interface StockService {
+import org.springframework.stereotype.Component;
+
+@Component("stockService")
+public interface StockService { 
+	
+	
+	public void handleStockEvent();
 
 }
