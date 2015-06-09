@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<datasources>
-	<local-tx-datasource>
-		<jndi-name>stock_ds</jndi-name>
-		<connection-url>jdbc:postgresql://localhost:5432/stock-datasvc</connection-url>    
+<datasources xmlns="http://www.jboss.org/ironjacamar/schema/datasources_1_0.xsd">
+	<datasource jndi-name="PostgresDS" pool-name="PostgresDS">
+		<connection-url>jdbc:postgresql://localhost:5432/stock-datasvc </connection-url>
 		<driver-class>org.postgresql.Driver</driver-class>
-		<user-name>datamaster</user-name>
-		<password>homeyg66</password>
-		<min-pool-size>10</min-pool-size>
-		<max-pool-size>100</max-pool-size>
-		<idle-timeout-minutes>100</idle-timeout-minutes>
-		<shared-prepared-statement>true</shared-prepared-statement>
-		<background-validation>true</background-validation>
-		<background-validation-minutes>10</background-validation-minutes>
-		<transaction-isolation>TRANSACTION_READ_COMMITTED
-		</transaction-isolation>
-	</local-tx-datasource>
+		<security>
+			<user-name>datasupermaster</user-name>
+			<password>datamaster</password>
+		</security>
+		<validation>
+			<valid-connection-checker
+				class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLValidConnectionChecker"></valid-connection-checker>
+			<exception-sorter
+				class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLExceptionSorter"></exception-sorter>
+		</validation>
+	</datasource>
 </datasources>

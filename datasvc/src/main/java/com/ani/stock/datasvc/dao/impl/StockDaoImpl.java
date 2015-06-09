@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 import com.ani.stock.datasvc.dao.StockDao;
 
+
 public class StockDaoImpl extends JdbcDaoSupport implements StockDao {
 
 	public void insertStock() {

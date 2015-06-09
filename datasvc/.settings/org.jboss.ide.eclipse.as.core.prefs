@@ -1,2 +1,2 @@
 eclipse.preferences.version=1
-org.jboss.ide.eclipse.as.core.singledeployable.deployableList=
+org.jboss.ide.eclipse.as.core.singledeployable.deployableList=config/stock-ds.xml\nsrc/main/webapp/WEB-INF/lib/postgresql-9.4-1201.jdbc41.jar\n

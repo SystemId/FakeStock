@@ -12,16 +12,17 @@
                            http://www.springframework.org/schema/mvc/spring-mvc.xsd">
                            
 	<context:annotation-config/>
+	<context:component-scan base-package ="com.ani.stock.datasvc"/>
 	
-	<bean id="deployProperties" class="org.springframework.beans.factory.PropertiesFactoryBean" 
+	<bean id="deployProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean" 
 		p:location="/WEB-INF/spring/spring-data.properties" />
 		
 	<context:property-placeholder properties-ref="deployProperties" />
 	
-	<bean id="stockDataSource" class="com.jolbox.bonecp.BoneCPDatasource" destroy-method="close" 
+	<bean id="stockDataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close" 
 	p:driver-class="org.postgresql.Driver"
 	p:jdbc-url="${dataJdbcURL}"
-	p:username="${dataJdbcURL}"
+	p:username="${dataJdbcUsername}"
 	p:password="${dataJdbcPassword}"
 	p:idle-connection-test-period="60"
 	p:idle-max-age="240"
@@ -36,11 +37,11 @@
 	<bean id="stockDataTemplate" class="org.springframework.jdbc.core.JdbcTemplate"
 		p:data-source-ref="stockDataSource" p:fetch-size="100" />
 
-	<bean id="stockDataDAO" class="com.ani.stock.datasvc.dao.impl.StockDaoImpl"
-		p:Stock-Dao-ref="StockDaoImpl" />
+	<bean id="stockDao" class="com.ani.stock.datasvc.dao.impl.StockDaoImpl"
+		p:jdbc-template-ref="stockDataTemplate" />
 
-	<bean id="stockDataService" class="com.ani.stock.datasvc.service.impl.StockServiceImpl"
-		p:Stock-Service-ref="StockServiceImpl" />	                     
+	<bean id="stockService" class="com.ani.stock.datasvc.service.impl.StockServiceImpl"
+		p:stock-dao-ref="stockDao" />	                     
                            
                            
                            
