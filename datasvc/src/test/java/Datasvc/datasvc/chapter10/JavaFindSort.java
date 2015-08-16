@@ -1,4 +1,4 @@
-package Datasvc.datasvc;
+package Datasvc.datasvc.chapter10;
 
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;

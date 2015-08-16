@@ -1,4 +1,4 @@
-package Datasvc.datasvc;
+package Datasvc.datasvc.chapter10;
 
 import com.mongodb.MongoClient;
 import com.mongodb.DB;
