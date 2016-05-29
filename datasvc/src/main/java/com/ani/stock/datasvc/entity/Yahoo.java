@@ -1,11 +1,15 @@
 package com.ani.stock.datasvc.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Document(collection ="stockQuote")
+//@JsonIgnoreProperties(ignoreUnknown = true)
 public class Yahoo {
 	
+	
+	@Id
+	private String id;
 	
 	private Query query;
 	

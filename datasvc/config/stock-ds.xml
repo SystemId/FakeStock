@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<datasources xmlns="http://www.jboss.org/ironjacamar/schema/datasources_1_0.xsd">
+<datasources
+	xmlns="http://www.jboss.org/ironjacamar/schema/datasources_1_0.xsd">
 	<datasource jndi-name="PostgresDS" pool-name="PostgresDS">
 		<connection-url>jdbc:postgresql://localhost:5432/stock-datasvc </connection-url>
 		<driver-class>org.postgresql.Driver</driver-class>
