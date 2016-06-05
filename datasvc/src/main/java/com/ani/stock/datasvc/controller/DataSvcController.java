@@ -1,6 +1,7 @@
 package com.ani.stock.datasvc.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,7 +30,7 @@ public class DataSvcController {
 //	
 	@RequestMapping(value = "/Ani/{startDate}/{endDate}/{ticker}/{Json}")
 	@ResponseBody
-	public byte[] retreiveStockMarketData(@PathVariable String startDate,@PathVariable String endDate, @PathVariable String ticker, @PathVariable boolean Json) throws IOException  {
+	public byte[] fetchStockMarketData(@PathVariable String startDate,@PathVariable String endDate, @PathVariable String ticker, @PathVariable boolean Json) throws IOException  {
 		Yahoo yahooCall = stockRestCall.callYahooWebSericeHistoricalQuotes(startDate, endDate, ticker, Json);
 		stockService.handleStockEvent(yahooCall);
 		//mongoDB.getStockQuotes();
@@ -40,13 +41,35 @@ public class DataSvcController {
 	@RequestMapping(value = "/kill")
 	@ResponseBody
 	public String retreiveStockMarketData() throws IOException  {
-//		Yahoo yahooCall = stockRestCall.callYahooWebSericeHistoricalQuotes(startDate, endDate, ticker, Json);
-//		stockService.handleStockEvent();
-//		mongoDB.getStockQuotes();
-//		return objectMapper.writeValueAsBytes(yahooCall);
 		return "done";
 		
 	}
+	
+	@RequestMapping(value = "/id/{id}")
+	@ResponseBody
+	public byte[] getStockMarketDataById( @PathVariable String id) throws IOException  {
+		Yahoo tickerData = stockService.getTicketDataById(id);
+		return objectMapper.writeValueAsBytes(tickerData);
+		
+	}
+	
+	@RequestMapping(value = "/symbol/{ticker}")
+	@ResponseBody
+	public byte[] getStockMarketData( @PathVariable String ticker) throws IOException  {
+		Yahoo tickerData = stockService.getTicketData(ticker);
+		return objectMapper.writeValueAsBytes(tickerData);
+		
+	}
+	
+	@RequestMapping(value = "/symbol")
+	@ResponseBody
+	public byte[] getAllStockMarketData() throws IOException  {
+		List<Yahoo> tickerData = stockService.getAllYahoo();
+		return objectMapper.writeValueAsBytes(tickerData);
+		
+	}
+	
+	
 	
 //	@RequestMapping(value = "/Ani/{startDate}/{endDate}/{ticker}/{Json}", method = RequestMethod.POST)
 //	@ResponseBody

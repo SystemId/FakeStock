@@ -1,5 +1,7 @@
 package com.ani.stock.datasvc.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,10 +20,19 @@ public class StockServiceImpl implements StockService {
 	SpringMongoDao springMongoDao;
 
 	public void handleStockEvent(Yahoo yahooCall) {
-			stockDao.insertStock();
+		stockDao.insertStock();
 		springMongoDao.insertYahoo(yahooCall);
 		
 		
+	}
+	
+	public Yahoo getTicketData(String ticker) {
+		return springMongoDao.getYahoo(ticker);
+		//return springMongoDao.getByTickerCount();
+	}
+	
+	public Yahoo getTicketDataById(String id){
+		return springMongoDao.getTickerDataById(id);
 	}
 
 	public StockDao getStockDao() {
@@ -30,6 +41,10 @@ public class StockServiceImpl implements StockService {
 
 	public void setStockDao(StockDao stockDao) {
 		this.stockDao = stockDao;
+	}
+	
+	public List<Yahoo> getAllYahoo() {
+		return springMongoDao.getAllYahoo();
 	}
 	
 
