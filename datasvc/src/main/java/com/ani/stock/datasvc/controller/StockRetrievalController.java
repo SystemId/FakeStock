@@ -15,7 +15,8 @@ import com.ani.stock.datasvc.service.StockService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
-public class DataSvcController {
+public class StockRetrievalController {  
+	
 	
 	ObjectMapper objectMapper = new ObjectMapper();
 	
@@ -25,21 +26,7 @@ public class DataSvcController {
 	@Autowired
 	StockRestCall stockRestCall;
 	
-//	@Autowired
-//	MongoDB mongoDB;
-//	
-	
-	//Rest Service used to grab a multi day spread of prices from the s & p
-	@RequestMapping(value = "/Ani/{startDate}/{endDate}/{ticker}/{Json}")
-	@ResponseBody
-	public byte[] fetchStockMarketData(@PathVariable String startDate,@PathVariable String endDate, @PathVariable String ticker, @PathVariable boolean Json) throws IOException  {
-		Yahoo yahooCall = stockRestCall.callYahooWebSericeHistoricalQuotes(startDate, endDate, ticker, Json);
-		stockService.handleStockEvent(yahooCall);
-	
-		return objectMapper.writeValueAsBytes(yahooCall);
-		
-	}
-	
+
 	@RequestMapping(value = "/kill")
 	@ResponseBody
 	public String retreiveStockMarketData() throws IOException  {
@@ -71,16 +58,6 @@ public class DataSvcController {
 		
 	}
 	
-	
-	
-//	@RequestMapping(value = "/Ani/{startDate}/{endDate}/{ticker}/{Json}", method = RequestMethod.POST)
-//	@ResponseBody
-//	public byte[] retreiveStockMarketData(@PathVariable String startdate,@PathVariable String endDate, @PathVariable String ticker, @RequestBody byte[] jsonData) throws IOException  {
-//		stockRestCall.callYahooWebSerice(startdate, endDate, ticker, Json);
-//		stockService.handleStockEvent();
-//		return objectMapper.writeValueAsBytes("jackson");
-//		
-//	}
 
 	public StockService getStockService() {
 		return stockService;
