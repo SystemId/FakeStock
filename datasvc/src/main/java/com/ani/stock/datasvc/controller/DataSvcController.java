@@ -28,12 +28,14 @@ public class DataSvcController {
 //	@Autowired
 //	MongoDB mongoDB;
 //	
+	
+	//Rest Service used to grab a multi day spread of prices from the s & p
 	@RequestMapping(value = "/Ani/{startDate}/{endDate}/{ticker}/{Json}")
 	@ResponseBody
 	public byte[] fetchStockMarketData(@PathVariable String startDate,@PathVariable String endDate, @PathVariable String ticker, @PathVariable boolean Json) throws IOException  {
 		Yahoo yahooCall = stockRestCall.callYahooWebSericeHistoricalQuotes(startDate, endDate, ticker, Json);
 		stockService.handleStockEvent(yahooCall);
-		//mongoDB.getStockQuotes();
+	
 		return objectMapper.writeValueAsBytes(yahooCall);
 		
 	}
