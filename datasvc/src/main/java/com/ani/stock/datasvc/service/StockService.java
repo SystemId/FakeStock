@@ -17,5 +17,7 @@ public interface StockService {
 	public Yahoo getTicketDataById(String id);
 	
 	public List<Yahoo> getAllYahoo();
+	
+	public void handleIndexStockEvent(Yahoo yahooCall);
 
 }

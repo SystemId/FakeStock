@@ -20,15 +20,15 @@ public class StockServiceImpl implements StockService {
 	SpringMongoDao springMongoDao;
 
 	public void handleStockEvent(Yahoo yahooCall) {
-	
 		springMongoDao.insertYahoo(yahooCall);
-		
-		
+	}
+	
+	public void handleIndexStockEvent(Yahoo yahooCall) {
+		springMongoDao.insertIndexedYahoo(yahooCall);
 	}
 	
 	public Yahoo getTicketData(String ticker) {
 		return springMongoDao.getYahoo(ticker);
-		//return springMongoDao.getByTickerCount();
 	}
 	
 	public Yahoo getTicketDataById(String id){

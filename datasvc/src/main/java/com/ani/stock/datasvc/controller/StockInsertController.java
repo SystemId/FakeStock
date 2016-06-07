@@ -43,7 +43,7 @@ public class StockInsertController {
 	
 	@RequestMapping(value = "/daily-tick/{ticker}")
 	@ResponseBody
-	public byte[] fetchdailyStockMarketData( @PathVariable String ticker) throws IOException  {
+	public String fetchdailyStockMarketData( @PathVariable String ticker) throws IOException  {
 		Calendar cal = Calendar.getInstance();
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		
@@ -62,8 +62,8 @@ public class StockInsertController {
 		String yesterday = dateFormat.format(cal.getTime());
 		Yahoo yahooCall = stockRestCall.callYahooWebSericeHistoricalQuotes(yesterday, today, ticker, true);
 		yahooCall.getQuery().getResults().getQuote().subList(1, yahooCall.getQuery().getResults().getQuote().size()).clear();
-		stockService.handleStockEvent(yahooCall);
-		return objectMapper.writeValueAsBytes(yahooCall);
+		stockService.handleIndexStockEvent(yahooCall);
+		return "true";
 	}
 	
 	

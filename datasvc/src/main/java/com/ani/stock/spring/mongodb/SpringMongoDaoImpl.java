@@ -25,6 +25,10 @@ public class SpringMongoDaoImpl implements SpringMongoDao {
 		mongoTemplate.save(yahoo);
 	}
 	
+	public void insertIndexedYahoo(Yahoo yahoo){
+		mongoTemplate.insert(yahoo, "SNPQuote");
+	}
+	
 	public Yahoo getYahoo(String ticker){
 		Query query = queryPreparer.constructMongoTickerQuery(ticker);
 		Yahoo yahoo = mongoTemplate.findOne(query, Yahoo.class,  "stockQuote");

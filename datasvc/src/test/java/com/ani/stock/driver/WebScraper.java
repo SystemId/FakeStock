@@ -2,22 +2,36 @@ package com.ani.stock.driver;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 import com.ani.stock.datasvc.entity.Security;
+
 
 public class WebScraper {
 	
 	public static final String SITE = "http://en.wikipedia.org/wiki/List_of_S%26P_500_companies";
 	
 	 public static void main(String[] args) throws IOException {
-		 scrapeStocksIndex();
-	}	
+		 storeSNPIndextoDatabase();
+	}
+	 
+	public static void storeSNPIndextoDatabase() throws IOException {
+		List<Security> stockList = scrapeStocksIndex();
+		for(Security stock: stockList){
+			hitServer(stock.getTicker());
+		}
+	}
 	public static List<Security> scrapeStocksIndex() throws IOException {
 		List<Security> listofTickers = new ArrayList<Security>();
 		Document doc = Jsoup.connect(SITE).get();
@@ -35,6 +49,18 @@ public class WebScraper {
 		}
 		return listofTickers;
 		
+	}
+	
+	public static String hitServer(String ticker){
+		String POST_URL = "http://127.0.0.1:8080/svc/daily-tick/";
+		RestTemplate template = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+		HttpEntity<String> entity = new HttpEntity<String>("feye",headers);
+		ResponseEntity<String> result = template.getForEntity(POST_URL + ticker, String.class);
+		String resultbody = result.getBody();
+		return resultbody;
 	}
 
 }

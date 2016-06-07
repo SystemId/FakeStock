@@ -9,6 +9,8 @@ public interface SpringMongoDao {
 
 	
 	public void insertYahoo(Yahoo yahoo);
+	
+	public void insertIndexedYahoo(Yahoo yahoo);
 		
 	public Yahoo getYahoo(String ticker);
 	
