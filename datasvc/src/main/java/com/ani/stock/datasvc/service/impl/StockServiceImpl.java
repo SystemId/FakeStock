@@ -20,7 +20,7 @@ public class StockServiceImpl implements StockService {
 	SpringMongoDao springMongoDao;
 
 	public void handleStockEvent(Yahoo yahooCall) {
-		stockDao.insertStock();
+	
 		springMongoDao.insertYahoo(yahooCall);
 		
 		

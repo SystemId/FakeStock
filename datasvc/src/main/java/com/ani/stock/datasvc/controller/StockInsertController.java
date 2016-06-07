@@ -1,6 +1,9 @@
 package com.ani.stock.datasvc.controller;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +38,32 @@ public class StockInsertController {
 	public byte[] fetchStockMarketData(@PathVariable String startDate,@PathVariable String endDate, @PathVariable String ticker, @PathVariable boolean Json) throws IOException  {
 		Yahoo yahooCall = stockRestCall.callYahooWebSericeHistoricalQuotes(startDate, endDate, ticker, Json);
 		stockService.handleStockEvent(yahooCall);
-	
 		return objectMapper.writeValueAsBytes(yahooCall);
+	}
+	
+	@RequestMapping(value = "/daily-tick/{ticker}")
+	@ResponseBody
+	public byte[] fetchdailyStockMarketData( @PathVariable String ticker) throws IOException  {
+		Calendar cal = Calendar.getInstance();
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		
+		//This line is temporary comment out when done
+		//cal.set(Calendar.DAY_OF_MONTH, 3);
+		
+		
+		String today = dateFormat.format(cal.getTime());
+		if(cal.get((Calendar.DAY_OF_WEEK)) == Calendar.MONDAY) {
+			cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH) -6);
+		}else {
+			cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH) -1);
+		}
+		
+		
+		String yesterday = dateFormat.format(cal.getTime());
+		Yahoo yahooCall = stockRestCall.callYahooWebSericeHistoricalQuotes(yesterday, today, ticker, true);
+		yahooCall.getQuery().getResults().getQuote().subList(1, yahooCall.getQuery().getResults().getQuote().size()).clear();
+		stockService.handleStockEvent(yahooCall);
+		return objectMapper.writeValueAsBytes(yahooCall);
 	}
 	
 	
