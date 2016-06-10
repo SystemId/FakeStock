@@ -66,6 +66,13 @@
     		<version>1.9.1.RELEASE</version>
 		</dependency> 
 		
+		<dependency>
+   			 <groupId>com.twilio.sdk</groupId>
+    		<artifactId>twilio-java-sdk</artifactId>
+    		<version>6.3.0</version>
+		</dependency>
+		
+		
 		<!-- http://mvnrepository.com/artifact/org.springframework.data/spring-data-mongodb-parent -->
 		<dependency>
     		<groupId>org.springframework.data</groupId>
