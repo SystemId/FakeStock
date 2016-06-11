@@ -61,6 +61,12 @@ public class StockInsertController {
 		return "true";
 	}
 	
+//	@RequestMapping(value ="/intraday/{ticker}")
+//	@ResponseBody
+//	public String fetchIntradayinformation(@PathVariable String ticker) throws IOException {
+//		
+//	}
+	
 	@RequestMapping(value = "/insert-special/{ticker}")
 	@ResponseBody
 	public String insertSpecialStock(@PathVariable String ticker) throws IOException {

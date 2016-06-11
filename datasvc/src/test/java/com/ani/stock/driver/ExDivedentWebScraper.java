@@ -22,8 +22,7 @@ import com.ani.stock.datasvc.entity.Security;
 public class ExDivedentWebScraper {
 	
 	public static final String SITE = "http://www.dividend.com/ex-dividend-dates.php";
-	public static final String YAHOO= "http://finance.yahoo.com/stock-center/";
-	
+		
 	 public static void main(String[] args) throws IOException {
 		 storeSNPIndextoDatabase();
 	}
