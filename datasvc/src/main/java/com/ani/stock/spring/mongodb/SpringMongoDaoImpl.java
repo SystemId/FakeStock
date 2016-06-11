@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
 import com.ani.stock.datasvc.entity.SpecialStock;
@@ -31,7 +32,11 @@ public class SpringMongoDaoImpl implements SpringMongoDao {
 	}
 	
 	public void insertSpecialStock(SpecialStock ticker){
-		mongoTemplate.insert(ticker, "specialTickers");
+		/*mongoTemplate.insert(ticker, "specialTickers");*/
+		Query query = new Query();
+		query.addCriteria(Criteria.where("stock").is(ticker.getStock()));
+		Update update = new Update().set("stock", ticker.getStock()).set("addedOn", ticker.getAddedOn());
+		mongoTemplate.upsert(query, update, SpecialStock.class);
 	}
 	
 	public Yahoo getYahoo(String ticker){

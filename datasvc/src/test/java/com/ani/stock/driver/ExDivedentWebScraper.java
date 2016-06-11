@@ -15,34 +15,41 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import com.ani.stock.datasvc.entity.ExDividendStock;
 import com.ani.stock.datasvc.entity.Security;
 
 
-public class WebScraper {
+public class ExDivedentWebScraper {
 	
-	public static final String SITE = "http://en.wikipedia.org/wiki/List_of_S%26P_500_companies";
+	public static final String SITE = "http://www.dividend.com/ex-dividend-dates.php";
+	public static final String YAHOO= "http://finance.yahoo.com/stock-center/";
 	
 	 public static void main(String[] args) throws IOException {
 		 storeSNPIndextoDatabase();
 	}
 	 
 	public static void storeSNPIndextoDatabase() throws IOException {
-		List<Security> stockList = scrapeStocksIndex();
-		for(Security stock: stockList){
-			hitServer(stock.getTicker());
-		}
+		List<ExDividendStock> stockList = scrapeStocksIndex();
+//		for(ExDividendStock stock: stockList){
+//			hitServer(stock.getStockSymbol());
+//		}
+		System.out.println(stockList);
 	}
-	public static List<Security> scrapeStocksIndex() throws IOException {
-		List<Security> listofTickers = new ArrayList<Security>();
+	public static List<ExDividendStock> scrapeStocksIndex() throws IOException {
+		List<ExDividendStock> listofTickers = new ArrayList<ExDividendStock>();
 		Document doc = Jsoup.connect(SITE).get();
-		Element table = doc.select("table.wikitable.sortable").first();
+		Element table = doc.select("table.exdiv").first();
 		for(Element element: table.select("tr")){
 			Elements elementsByAttribute = element.select("td");
-			if (elementsByAttribute.size() > 0) {
-				Security sec = new Security();
-				sec.setCompany(elementsByAttribute.get(3).text());
-				sec.setSector(elementsByAttribute.get(1).text());
-				sec.setTicker(elementsByAttribute.get(0).text());
+			if (elementsByAttribute.size() > 5) {
+				ExDividendStock sec = new ExDividendStock();
+				sec.setStockSymbol(elementsByAttribute.get(0).text());
+				sec.setCompanyName(elementsByAttribute.get(1).text());
+				sec.setExDivDate(elementsByAttribute.get(3).text());
+				sec.setPayDate(elementsByAttribute.get(4).text());
+				sec.setPayout(elementsByAttribute.get(5).text());
+				sec.setStockPrice(elementsByAttribute.get(7).text());
+				sec.setDivYield(elementsByAttribute.get(8).text());
 				listofTickers.add(sec);
 				
 			}
