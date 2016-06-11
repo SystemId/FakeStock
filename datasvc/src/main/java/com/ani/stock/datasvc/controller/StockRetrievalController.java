@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ani.stock.datasvc.entity.SpecialStock;
 import com.ani.stock.datasvc.entity.Yahoo;
 import com.ani.stock.datasvc.service.StockRestCall;
 import com.ani.stock.datasvc.service.StockService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
@@ -63,6 +65,13 @@ public class StockRetrievalController {
 	public String removeSpecialTicker(@PathVariable String ticker){
 		stockService.removeSpecialTicker(ticker);
 		return"ok";
+	}
+	
+	@RequestMapping(value = "/view-special/")
+	@ResponseBody
+	public byte[]  retrieveAllSpecialStock() throws JsonProcessingException{
+		List<SpecialStock> stocks = stockService.retreiveAllSpecialStock();
+		return objectMapper.writeValueAsBytes(stocks);
 	}
 	
 

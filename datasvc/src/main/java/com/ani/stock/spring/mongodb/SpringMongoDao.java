@@ -24,6 +24,8 @@ public interface SpringMongoDao {
 	public void insertSpecialStock(SpecialStock ticker);
 
 	public void removeSpecialTicker(String ticker);
+
+	public List<SpecialStock> retreiveAllSpecialStock();
 	
 	
 

@@ -43,6 +43,9 @@ public class StockServiceImpl implements StockService {
 	public void removeSpecialTicker(String ticker){
 		springMongoDao.removeSpecialTicker(ticker);
 	}
+	public List<SpecialStock> retreiveAllSpecialStock(){
+		return springMongoDao.retreiveAllSpecialStock();
+	}
 
 	public StockDao getStockDao() {
 		return stockDao;

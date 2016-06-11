@@ -65,6 +65,10 @@ public class SpringMongoDaoImpl implements SpringMongoDao {
 		mongoTemplate.remove(query, "specialTickers");
 	}
 	
+	public List<SpecialStock> retreiveAllSpecialStock(){
+		List<SpecialStock> specialStocks = mongoTemplate.findAll(SpecialStock.class);
+		return specialStocks;
+	}
 	
 	
 

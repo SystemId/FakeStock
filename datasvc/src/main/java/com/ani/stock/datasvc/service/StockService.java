@@ -25,4 +25,6 @@ public interface StockService {
 
 	public void removeSpecialTicker(String ticker);
 
+	public List<SpecialStock> retreiveAllSpecialStock();
+
 }
