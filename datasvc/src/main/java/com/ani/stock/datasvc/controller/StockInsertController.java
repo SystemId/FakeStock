@@ -17,6 +17,7 @@ import com.ani.stock.datasvc.entity.Yahoo;
 import com.ani.stock.datasvc.service.StockRestCall;
 import com.ani.stock.datasvc.service.StockService;
 import com.ani.stock.datasvc.util.DataSvcUtil;
+import com.ani.stock.datasvc.yahoo.intraday.YahooIntraday;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
@@ -61,11 +62,12 @@ public class StockInsertController {
 		return "true";
 	}
 	
-//	@RequestMapping(value ="/intraday/{ticker}")
-//	@ResponseBody
-//	public String fetchIntradayinformation(@PathVariable String ticker) throws IOException {
-//		
-//	}
+	@RequestMapping(value ="/intraday/{ticker}")
+	@ResponseBody
+	public byte[] fetchIntradayinformation(@PathVariable String ticker) throws IOException {
+		YahooIntraday callIntradayQuote = stockRestCall.callIntradayQuote(ticker, true);
+		return objectMapper.writeValueAsBytes(callIntradayQuote);
+	}
 	
 	@RequestMapping(value = "/insert-special/{ticker}")
 	@ResponseBody

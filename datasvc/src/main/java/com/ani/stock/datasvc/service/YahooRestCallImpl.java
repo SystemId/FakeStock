@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import com.ani.stock.datasvc.entity.Yahoo;
+import com.ani.stock.datasvc.yahoo.intraday.YahooIntraday;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -54,6 +55,20 @@ public class YahooRestCallImpl implements StockRestCall {
 		return stock;
 	}
 	
+	public YahooIntraday callIntradayQuote(String ticker, boolean Json){
+		
+		//String selectStatement=  "select * from yahoo.finance.quotewhere symbol = "; 
+		//String url = BASEURL_YAHOO_FINANCE  + selectStatement + ticker + YAHOO_FINANCE_JSON;
+		
+		String startURL = "http://finance.yahoo.com/webservice/v1/symbols/";
+		String endURL = "/quote?format=json&view=detail";
+		
+		String restUrl = startURL + ticker + endURL;
+		
+		RestTemplate restTemplate = new RestTemplate();
+		YahooIntraday stock = restTemplate.getForObject(restUrl, YahooIntraday.class);
+		return stock;
+	}
 	
 
 }
