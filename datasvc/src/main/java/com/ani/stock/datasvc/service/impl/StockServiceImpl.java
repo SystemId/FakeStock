@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ani.stock.datasvc.dao.StockDao;
+import com.ani.stock.datasvc.entity.SpecialStock;
 import com.ani.stock.datasvc.entity.Yahoo;
 import com.ani.stock.datasvc.service.StockService;
 import com.ani.stock.spring.mongodb.SpringMongoDao;
@@ -34,6 +35,14 @@ public class StockServiceImpl implements StockService {
 	public Yahoo getTicketDataById(String id){
 		return springMongoDao.getTickerDataById(id);
 	}
+	
+	public void insertSpecicalStock(SpecialStock ticker){
+		 springMongoDao.insertSpecialStock(ticker);
+	}
+	
+	public void removeSpecialTicker(String ticker){
+		springMongoDao.removeSpecialTicker(ticker);
+	}
 
 	public StockDao getStockDao() {
 		return stockDao;
@@ -46,6 +55,8 @@ public class StockServiceImpl implements StockService {
 	public List<Yahoo> getAllYahoo() {
 		return springMongoDao.getAllYahoo();
 	}
+
+	
 	
 
 }

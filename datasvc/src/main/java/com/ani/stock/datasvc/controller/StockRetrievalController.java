@@ -58,6 +58,13 @@ public class StockRetrievalController {
 		
 	}
 	
+	@RequestMapping(value ="/remove-special/{ticker}")
+	@ResponseBody
+	public String removeSpecialTicker(@PathVariable String ticker){
+		stockService.removeSpecialTicker(ticker);
+		return"ok";
+	}
+	
 
 	public StockService getStockService() {
 		return stockService;

@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
+import com.ani.stock.datasvc.entity.SpecialStock;
 import com.ani.stock.datasvc.entity.Yahoo;
 import com.ani.stock.query.QueryPreparer;
 
@@ -27,6 +28,10 @@ public class SpringMongoDaoImpl implements SpringMongoDao {
 	
 	public void insertIndexedYahoo(Yahoo yahoo){
 		mongoTemplate.insert(yahoo, "SNPQuote");
+	}
+	
+	public void insertSpecialStock(SpecialStock ticker){
+		mongoTemplate.insert(ticker, "specialTickers");
 	}
 	
 	public Yahoo getYahoo(String ticker){
@@ -52,6 +57,12 @@ public class SpringMongoDaoImpl implements SpringMongoDao {
 		Query query = queryPreparer.grabTickerCount();
 		Yahoo yahoo = mongoTemplate.findOne(query, Yahoo.class, "stockQuote");
 		return yahoo;
+	}
+	
+	public void removeSpecialTicker(String ticker){
+		Query query = new Query();
+		query.addCriteria(Criteria.where("stock").is(ticker));
+		mongoTemplate.remove(query, "specialTickers");
 	}
 	
 	
