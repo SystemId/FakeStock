@@ -3,8 +3,11 @@ package com.ani.stock.datasvc.controller;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ani.stock.datasvc.email.SendEmail;
 import com.ani.stock.datasvc.entity.SpecialStock;
 import com.ani.stock.datasvc.entity.Yahoo;
 import com.ani.stock.datasvc.service.StockRestCall;
@@ -33,6 +37,9 @@ public class StockInsertController {
 	
 	@Autowired
 	DataSvcUtil dataSvcUtil;
+	
+	@Autowired
+	SendEmail sendEmail;
 	
 //	@Autowired
 //	MongoDB mongoDB;
@@ -77,7 +84,25 @@ public class StockInsertController {
 		return ticker;
 	}
 	
+	@RequestMapping(value = "/send-email/")
+	@ResponseBody
+	public String sendEmail() throws IOException, MessagingException {
+		List<String> toAddress = new ArrayList<String>();
+		toAddress.add("anirbaneroy@gmail.com");
+		sendEmail.executeDelivery("genappsltd@gmail.com", toAddress, null, null, "test", "test", null);
+		return "ok";
+		
+	}
 	
+	@RequestMapping(value = "/send-text/")
+	@ResponseBody
+	public String sendText() throws IOException, MessagingException {
+		List<String> toAddress = new ArrayList<String>();
+		toAddress.add("6109442027@txt.att.net");
+		sendEmail.executeDelivery("genappsltd@gmail.com", toAddress, null, null, "test", "test", null);
+		return "ok";
+		
+	}
 	
 
 

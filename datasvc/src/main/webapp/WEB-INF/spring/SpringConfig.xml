@@ -2,6 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
@@ -11,7 +12,9 @@
                            http://www.springframework.org/schema/context 
                            http://www.springframework.org/schema/context/spring-context.xsd
                            http://www.springframework.org/schema/mvc
-                           http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+                           http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                           http://www.springframework.org/schema/task
+						   http://www.springframework.org/schema/task/spring-task.xsd">
 
 	<context:annotation-config />
 	<context:component-scan base-package="com.ani.stock" />
@@ -48,8 +51,32 @@
 		<constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
 	</bean>
 	
+	<bean id="mailSender" class ="org.springframework.mail.javamail.JavaMailSenderImpl" >
+    <property name="host"><value>smtp.gmail.com</value></property>
+        <property name="port"><value>587</value></property>
+        <property name="protocol"><value>smtp</value></property>
+        <property name="username"><value>genappssmtp@gmail.com</value></property>
+        <property name="password"><value>${smtpPassword}</value></property>
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+                <prop key="mail.smtp.quitwait">false</prop>
+            </props>
+        </property>
+	</bean>
 	
-
+	
+	<!-- Cron Job stuff -->
+	
+	<bean id ="cronTaskExecuter" class="com.ani.stock.datasvc.cron.CronTaskExecuter">
+	</bean>
+	
+	<task:scheduler id="cronScheduler"/>
+	
+	<task:scheduled-tasks scheduler="cronScheduler">
+    	<task:scheduled ref="cronTaskExecuter" method="callStockService" cron="*/30 * * * * ?"/>
+	</task:scheduled-tasks>
 
 
 
