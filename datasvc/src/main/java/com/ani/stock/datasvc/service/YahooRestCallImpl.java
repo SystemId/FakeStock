@@ -11,6 +11,10 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+
+//This Implementation is no longer valid as Yahoo finance api no longer works
+
+
 @Component("stockRestCall")
 public class YahooRestCallImpl implements StockRestCall {
 	
