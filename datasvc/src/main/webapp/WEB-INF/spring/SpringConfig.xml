@@ -66,6 +66,9 @@
         </property>
 	</bean>
 	
+	 <bean id="yahooWebScraper" class="com.ani.stock.datasvc.service.YahooWebScraperImpl"
+		init-method="init">
+	</bean>
 	
 	<!-- Cron Job stuff -->
 	

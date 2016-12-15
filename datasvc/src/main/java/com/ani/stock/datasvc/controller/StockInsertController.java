@@ -20,6 +20,7 @@ import com.ani.stock.datasvc.entity.SpecialStock;
 import com.ani.stock.datasvc.entity.Yahoo;
 import com.ani.stock.datasvc.service.StockRestCall;
 import com.ani.stock.datasvc.service.StockService;
+import com.ani.stock.datasvc.service.YahooWebScraperImpl;
 import com.ani.stock.datasvc.util.DataSvcUtil;
 import com.ani.stock.datasvc.yahoo.intraday.YahooIntraday;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,6 +42,9 @@ public class StockInsertController {
 	@Autowired
 	SendEmail sendEmail;
 	
+	@Autowired
+	YahooWebScraperImpl webScraper;
+	
 //	@Autowired
 //	MongoDB mongoDB;
 	
@@ -48,6 +52,7 @@ public class StockInsertController {
 //	
 	
 	//Rest Service used to grab a multi day spread of prices from the s & p
+	//This uses YQL which is no long valiid
 	@RequestMapping(value = "/Ani/{startDate}/{endDate}/{ticker}/{Json}")
 	@ResponseBody
 	public byte[] fetchStockMarketData(@PathVariable String startDate,@PathVariable String endDate, @PathVariable String ticker, @PathVariable boolean Json) throws IOException  {
@@ -56,7 +61,8 @@ public class StockInsertController {
 		return objectMapper.writeValueAsBytes(yahooCall);
 	}
 	
-	@RequestMapping(value = "/daily-tick/{ticker}")
+	//This uses YQL which is no long valiid
+	@RequestMapping(value = "/daily-tick-old/{ticker}")
 	@ResponseBody
 	public String fetchdailyStockMarketData( @PathVariable String ticker) throws IOException  {
 		Calendar cal = Calendar.getInstance();
@@ -68,6 +74,14 @@ public class StockInsertController {
 		stockService.handleIndexStockEvent(yahooCall);
 		return "true";
 	}
+	//This method is designed to scrap Yahoo finance page
+	@RequestMapping(value = "/daily-tick-new/{ticker}")
+	@ResponseBody
+	public String scrapeStockMarketData( @PathVariable String ticker) throws IOException  {
+		webScraper.scrape();
+		return "true";
+	}
+	
 	
 	@RequestMapping(value ="/intraday/{ticker}")
 	@ResponseBody
