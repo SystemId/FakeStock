@@ -1,4 +1,4 @@
-package com.ani.stock.datasvc.service;
+package com.ani.stock.driver;
 
 import java.io.IOException;
 
@@ -15,13 +15,13 @@ import org.springframework.stereotype.Component;
 import com.ani.stock.datasvc.scrape.dto.YahooHistoricalQuote;
 
 
-public class YahooWebScraperImpl {
+public class OptionsWebScraperTest {
 	
 	static WebDriver driver;
 
-	YahooHistoricalQuote quote;
+
 	
-	public void init(){
+	public OptionsWebScraperTest(){
 		String driverlocation = "/Users/minimac/apps/development/geckodriver";
 		System.setProperty("webdriver.gecko.driver", driverlocation);
 		driver = new MarionetteDriver();
@@ -29,15 +29,21 @@ public class YahooWebScraperImpl {
 
 
 	public static final String OPENSITE = "https://finance.yahoo.com/quote/"; 
-	public static final String HISTORY = "/history?p=";
+	public static final String HISTORY = "/options?p=";
 	
+	public static void main(String[] args) throws IOException {
+		OptionsWebScraperTest scraper = new OptionsWebScraperTest();
+		scraper.scrape();
+	}
+	
+
 	  public void scrape() throws IOException {
 	        //seleniumGrab();
 	        scrapePage("feye");
 	  }  
 	
-	public String scrapePage(String ticker) throws IOException {
-		String text = null;
+	public YahooHistoricalQuote scrapePage(String ticker) throws IOException {
+		YahooHistoricalQuote text = null;
 		try{
 			text = connectToHTML(ticker);
 		} catch(Exception e){
@@ -48,21 +54,50 @@ public class YahooWebScraperImpl {
 		return text;
 	}
 
-	private String connectToHTML(String ticker)
+	private YahooHistoricalQuote connectToHTML(String ticker)
 			throws IOException {
 		String url = OPENSITE + ticker + HISTORY + ticker;
 		driver.get(url);
 		String pageSource = driver.getPageSource();
 		Document doc = Jsoup.parse(pageSource);
-		String text = null;
 		
-		Element div = doc.select("table.Mt(15px).drop-down-selector.historical").first();
-		for(Element element: div.select("h3")){
-			text = "\"" + element.text() + "\"";
-			break;
+		
+		YahooHistoricalQuote quote = null;
+		//Element div = doc.select("div[class=W(100%) Pos(r)]").first();
+		Element div = doc.select("table[class=calls table-bordered W(100%) Pos(r) Bd(0) Pt(0) list-options]").first();
+		for(Element tr: div.select("tr")){
+			int i = 0;
+			for(Element td :tr.select("td")){
+				if(quote == null){
+					quote = new YahooHistoricalQuote();
+					quote.setTicker(ticker);
+				}
+				String scrapeText = td.text();
+				if(i==0){
+					quote.setDate(scrapeText);
+				}else if(i==1){
+					quote.setOpen(scrapeText);
+				}else if(i==2){
+					quote.setHigh(scrapeText);
+				}else if(i==3){
+					quote.setLow(scrapeText);
+				}else if(i==4){
+					quote.setClose(scrapeText);
+				}else if(i==5){
+					quote.setAdjClose(scrapeText);
+				}else if(i==6){
+					quote.setVolume(scrapeText);
+				}
+				System.out.println(scrapeText);
+				i++;
+			}
+			if(quote != null){
+				break;
+			}
 		}
 		
-		return text;
+		
+		return quote;
 	}
 	
 
