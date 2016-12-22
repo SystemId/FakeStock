@@ -1,8 +1,16 @@
 package com.ani.stock.datasvc.scrape.dto;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection ="yahooHistoricalQuote")
 public class YahooHistoricalQuote {
 	
+	@Id
+	private String id;
+	
 	private String ticker;
+
 	private String date;
 	private String open;
 	private String high;
@@ -59,7 +67,12 @@ public class YahooHistoricalQuote {
 	public void setVolume(String volume) {
 		this.volume = volume;
 	}
-	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	
 
 }

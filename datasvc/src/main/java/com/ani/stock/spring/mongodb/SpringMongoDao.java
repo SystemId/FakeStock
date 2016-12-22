@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ani.stock.datasvc.entity.SpecialStock;
 import com.ani.stock.datasvc.entity.Yahoo;
+import com.ani.stock.datasvc.scrape.dto.YahooHistoricalQuote;
 
 public interface SpringMongoDao {
 	
@@ -11,7 +12,7 @@ public interface SpringMongoDao {
 	
 	public void insertYahoo(Yahoo yahoo);
 	
-	public void insertIndexedYahoo(Yahoo yahoo);
+	public void insertIndexedYahoo(YahooHistoricalQuote yahoo);
 		
 	public Yahoo getYahoo(String ticker);
 	

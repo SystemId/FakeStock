@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.ani.stock.datasvc.entity.SpecialStock;
 import com.ani.stock.datasvc.entity.Yahoo;
+import com.ani.stock.datasvc.scrape.dto.YahooHistoricalQuote;
 import com.ani.stock.query.QueryPreparer;
 
 @Component("springMongoDao")
@@ -27,9 +28,15 @@ public class SpringMongoDaoImpl implements SpringMongoDao {
 		mongoTemplate.save(yahoo);
 	}
 	
-	public void insertIndexedYahoo(Yahoo yahoo){
-		mongoTemplate.insert(yahoo, "SNPQuote");
+	//Old WAY old data structure
+//	public void insertIndexedYahoo(Yahoo yahoo){
+//		mongoTemplate.insert(yahoo, "SNPQuote");
+//	}
+	
+	public void insertIndexedYahoo(YahooHistoricalQuote yahoo){
+		mongoTemplate.insert(yahoo, "yahooHistoricalQuote");
 	}
+	
 	
 	public void insertSpecialStock(SpecialStock ticker){
 		/*mongoTemplate.insert(ticker, "specialTickers");*/

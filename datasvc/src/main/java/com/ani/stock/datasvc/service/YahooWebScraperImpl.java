@@ -10,9 +10,11 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.MarionetteDriver;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ani.stock.datasvc.scrape.dto.YahooHistoricalQuote;
+import com.ani.stock.spring.mongodb.SpringMongoDao;
 
 
 public class YahooWebScraperImpl {
@@ -20,6 +22,9 @@ public class YahooWebScraperImpl {
 	static WebDriver driver;
 
 	YahooHistoricalQuote quote;
+	
+	@Autowired
+	SpringMongoDao springDao;
 	
 	public void init(){
 		String driverlocation = "/Users/minimac/apps/development/geckodriver";
@@ -36,10 +41,11 @@ public class YahooWebScraperImpl {
 	        scrapePage("feye");
 	  }  
 	
-	public String scrapePage(String ticker) throws IOException {
-		String text = null;
+	public YahooHistoricalQuote scrapePage(String ticker) throws IOException {
+		YahooHistoricalQuote text = null;
 		try{
 			text = connectToHTML(ticker);
+			springDao.insertIndexedYahoo(text);
 		} catch(Exception e){
 			System.out.println(e);
 		}
@@ -48,30 +54,51 @@ public class YahooWebScraperImpl {
 		return text;
 	}
 
-	private String connectToHTML(String ticker)
+	private YahooHistoricalQuote connectToHTML(String ticker)
 			throws IOException {
 		String url = OPENSITE + ticker + HISTORY + ticker;
 		driver.get(url);
 		String pageSource = driver.getPageSource();
 		Document doc = Jsoup.parse(pageSource);
-		String text = null;
 		
-		Element div = doc.select("table.Mt(15px).drop-down-selector.historical").first();
-		for(Element element: div.select("h3")){
-			text = "\"" + element.text() + "\"";
-			break;
+		
+		YahooHistoricalQuote quote = null;
+		Element div = doc.select("table[data-test=historical-prices]").first();
+		for(Element tr: div.select("tr")){
+			int i = 0;
+			for(Element td :tr.select("td")){
+				if(quote == null){
+					quote = new YahooHistoricalQuote();
+					quote.setTicker(ticker);
+				}
+				String scrapeText = td.text();
+				if(i==0){
+					quote.setDate(scrapeText);
+				}else if(i==1){
+					quote.setOpen(scrapeText);
+				}else if(i==2){
+					quote.setHigh(scrapeText);
+				}else if(i==3){
+					quote.setLow(scrapeText);
+				}else if(i==4){
+					quote.setClose(scrapeText);
+				}else if(i==5){
+					quote.setAdjClose(scrapeText);
+				}else if(i==6){
+					quote.setVolume(scrapeText);
+				}
+				System.out.println(scrapeText);
+				i++;
+			}
+			if(quote != null){
+				break;
+			}
 		}
-		
-		return text;
+		return quote;
 	}
 	
 
-//	public static void seleniumGrab(){
-//	
-//		driver.get("https://pubchem.ncbi.nlm.nih.gov/search/#collection=compounds&query_type=text&concise_view=true&filters=false&query=24631-29-6");
-//		WebElement findElement = drive.findElement(By.id("search-app"));
-//	}
-	
+
 
 	
 
