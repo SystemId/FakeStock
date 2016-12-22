@@ -5,7 +5,7 @@ public class StockOption {
 	private String strike; 
 	private String name;
 	private String lastPrice;
-	private String big;
+	private String bid;
 	private String ask;
 	private String change;
 	private String changePercent;
@@ -24,18 +24,19 @@ public class StockOption {
 	public void setName(String name) {
 		this.name = name;
 	}
+	public String getBid() {
+		return bid;
+	}
+	public void setBid(String bid) {
+		this.bid = bid;
+	}
 	public String getLastPrice() {
 		return lastPrice;
 	}
 	public void setLastPrice(String lastPrice) {
 		this.lastPrice = lastPrice;
 	}
-	public String getBig() {
-		return big;
-	}
-	public void setBig(String big) {
-		this.big = big;
-	}
+
 	public String getAsk() {
 		return ask;
 	}

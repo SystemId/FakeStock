@@ -10,7 +10,15 @@ public class OptionsDTO {
 	private List<StockOption> callOptions = new ArrayList<StockOption>();
 	private List<StockOption> putOptions = new ArrayList<StockOption>();
 	private Calendar today = Calendar.getInstance();
+	private String expirationDate;
 	
+
+	public String getExpirationDate() {
+		return expirationDate;
+	}
+	public void setExpirationDate(String expirationDate) {
+		this.expirationDate = expirationDate;
+	}
 	public Calendar getToday() {
 		return today;
 	}
