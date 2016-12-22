@@ -62,18 +62,18 @@ public class StockInsertController {
 	}
 	
 	//This uses YQL which is no long valiid
-	@RequestMapping(value = "/daily-tick-old/{ticker}")
-	@ResponseBody
-	public String fetchdailyStockMarketData( @PathVariable String ticker) throws IOException  {
-		Calendar cal = Calendar.getInstance();
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		String today = dataSvcUtil.adjustCalendarDatesForYahoo(cal, dateFormat);
-		String yesterday = dateFormat.format(cal.getTime());
-		Yahoo yahooCall = stockRestCall.callYahooWebSericeHistoricalQuotes(yesterday, today, ticker, true);
-		yahooCall.getQuery().getResults().getQuote().subList(1, yahooCall.getQuery().getResults().getQuote().size()).clear();
-		stockService.handleIndexStockEvent(yahooCall);
-		return "true";
-	}
+//	@RequestMapping(value = "/daily-tick-old/{ticker}")
+//	@ResponseBody
+//	public String fetchdailyStockMarketData( @PathVariable String ticker) throws IOException  {
+//		Calendar cal = Calendar.getInstance();
+//		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//		String today = dataSvcUtil.adjustCalendarDatesForYahoo(cal, dateFormat);
+//		String yesterday = dateFormat.format(cal.getTime());
+//		Yahoo yahooCall = stockRestCall.callYahooWebSericeHistoricalQuotes(yesterday, today, ticker, true);
+//		yahooCall.getQuery().getResults().getQuote().subList(1, yahooCall.getQuery().getResults().getQuote().size()).clear();
+//		stockService.handleIndexStockEvent(yahooCall);
+//		return "true";
+//	}
 
 	
 	@RequestMapping(value ="/intraday/{ticker}")

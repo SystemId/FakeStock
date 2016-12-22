@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ani.stock.datasvc.email.SendEmail;
 import com.ani.stock.datasvc.service.StockRestCall;
 import com.ani.stock.datasvc.service.StockService;
+import com.ani.stock.datasvc.service.YahooWebOptionsImpl;
 import com.ani.stock.datasvc.service.YahooWebScraperImpl;
 import com.ani.stock.datasvc.util.DataSvcUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,11 +38,22 @@ public class YahooWebController {
 	@Autowired
 	YahooWebScraperImpl webScraper;
 	
+	@Autowired
+	YahooWebOptionsImpl optionsScraper;
+	
 	//This method is designed to scrap Yahoo finance page
 	@RequestMapping(value = "/daily-tick-new/{ticker}")
 	@ResponseBody
 	public String scrapeStockMarketData( @PathVariable String ticker) throws IOException  {
 		webScraper.scrape();
+		return "true";
+	}
+	
+	
+	@RequestMapping(value = "/daily-options/{ticker}")
+	@ResponseBody
+	public String scrapeStockMarketOptions( @PathVariable String ticker) throws IOException  {
+		optionsScraper.scrape();
 		return "true";
 	}
 	

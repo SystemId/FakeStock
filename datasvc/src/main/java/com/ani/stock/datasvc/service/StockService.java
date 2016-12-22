@@ -19,7 +19,7 @@ public interface StockService {
 	
 	public List<Yahoo> getAllYahoo();
 	
-	public void handleIndexStockEvent(Yahoo yahooCall);
+	//public void handleIndexStockEvent(Yahoo yahooCall);
 
 	public void insertSpecicalStock(SpecialStock stock);
 

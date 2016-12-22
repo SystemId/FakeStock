@@ -70,6 +70,11 @@
 		init-method="init">
 	</bean>
 	
+	 <bean id="yahooOptionsScraper" class="com.ani.stock.datasvc.service.YahooWebOptionsImpl"
+		init-method="init">
+	</bean>
+	
+	
 	<!-- Cron Job stuff -->
 	
 	<bean id ="cronTaskExecuter" class="com.ani.stock.datasvc.cron.CronTaskExecuter">
