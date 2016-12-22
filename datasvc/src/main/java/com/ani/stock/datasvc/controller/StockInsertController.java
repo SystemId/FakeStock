@@ -74,14 +74,7 @@ public class StockInsertController {
 		stockService.handleIndexStockEvent(yahooCall);
 		return "true";
 	}
-	//This method is designed to scrap Yahoo finance page
-	@RequestMapping(value = "/daily-tick-new/{ticker}")
-	@ResponseBody
-	public String scrapeStockMarketData( @PathVariable String ticker) throws IOException  {
-		webScraper.scrape();
-		return "true";
-	}
-	
+
 	
 	@RequestMapping(value ="/intraday/{ticker}")
 	@ResponseBody

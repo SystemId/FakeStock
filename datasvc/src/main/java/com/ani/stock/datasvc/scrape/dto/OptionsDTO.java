@@ -4,8 +4,16 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection ="optionsDTO")
 public class OptionsDTO {
 	
+	@Id
+	private String id;
+	
+
 	private String ticker;
 	private List<StockOption> callOptions = new ArrayList<StockOption>();
 	private List<StockOption> putOptions = new ArrayList<StockOption>();
@@ -42,6 +50,12 @@ public class OptionsDTO {
 	}
 	public void setPutOptions(List<StockOption> putOptions) {
 		this.putOptions = putOptions;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
 	}
 
 
