@@ -36,9 +36,9 @@ public class YahooWebScraperImpl {
 	public static final String OPENSITE = "https://finance.yahoo.com/quote/"; 
 	public static final String HISTORY = "/history?p=";
 	
-	  public void scrape() throws IOException {
+	  public void scrape(String ticker) throws IOException {
 	        //seleniumGrab();
-	        scrapePage("feye");
+	        scrapePage(ticker);
 	  }  
 	
 	public YahooHistoricalQuote scrapePage(String ticker) throws IOException {

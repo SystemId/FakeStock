@@ -51,7 +51,7 @@ public class YahooWebController {
 	@RequestMapping(value = "/daily-tick-new/{ticker}")
 	@ResponseBody
 	public String scrapeStockMarketData( @PathVariable String ticker) throws IOException  {
-		webScraper.scrape();
+		webScraper.scrape(ticker);
 		return "true";
 	}
 	
@@ -65,8 +65,12 @@ public class YahooWebController {
 	
 	@RequestMapping(value ="/grab-all-sp-ticker/")
 	@ResponseBody
-	public String grabAllSPTicker(){
+	public String grabAllSPTicker() throws IOException{
 		List<String> tickers = stockSvc.grabFromSandPFromDatabase();
+		for(String ticker: tickers){
+			optionsScraper.scrape(ticker);           
+			System.out.println(ticker);
+		}
 		return "true";
 		
 	}
