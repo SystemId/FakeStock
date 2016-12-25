@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import com.ani.stock.datasvc.entity.SpecialStock;
 import com.ani.stock.datasvc.entity.Yahoo;
 
+//this is an old-service class that is no longer in use
 @Component("stockService")
 public interface StockService { 
 	

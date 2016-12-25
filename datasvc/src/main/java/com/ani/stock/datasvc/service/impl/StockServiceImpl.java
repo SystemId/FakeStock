@@ -10,7 +10,7 @@ import com.ani.stock.datasvc.entity.SpecialStock;
 import com.ani.stock.datasvc.entity.Yahoo;
 import com.ani.stock.datasvc.service.StockService;
 import com.ani.stock.spring.mongodb.SpringMongoDao;
-
+//this service class is no longer in use
 @Component("stockService")
 public class StockServiceImpl implements StockService {
 	

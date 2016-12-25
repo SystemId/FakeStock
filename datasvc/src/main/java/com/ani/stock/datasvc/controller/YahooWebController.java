@@ -57,5 +57,13 @@ public class YahooWebController {
 		return "true";
 	}
 	
+	@RequestMapping(value ="/grab-all-ticker/")
+	@ResponseBody
+	public String grabAllTicker(){
+		
+		
+		return "true";
+		
+	}
 
 }
