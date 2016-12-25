@@ -1,6 +1,7 @@
 package com.ani.stock.datasvc.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ani.stock.datasvc.email.SendEmail;
 import com.ani.stock.datasvc.service.StockRestCall;
 import com.ani.stock.datasvc.service.StockService;
+import com.ani.stock.datasvc.service.StockSvc;
 import com.ani.stock.datasvc.service.YahooWebOptionsImpl;
 import com.ani.stock.datasvc.service.YahooWebScraperImpl;
 import com.ani.stock.datasvc.util.DataSvcUtil;
@@ -41,6 +43,10 @@ public class YahooWebController {
 	@Autowired
 	YahooWebOptionsImpl optionsScraper;
 	
+	@Autowired
+	StockSvc stockSvc;
+	
+	
 	//This method is designed to scrap Yahoo finance page
 	@RequestMapping(value = "/daily-tick-new/{ticker}")
 	@ResponseBody
@@ -57,11 +63,18 @@ public class YahooWebController {
 		return "true";
 	}
 	
-	@RequestMapping(value ="/grab-all-ticker/")
+	@RequestMapping(value ="/grab-all-sp-ticker/")
 	@ResponseBody
-	public String grabAllTicker(){
+	public String grabAllSPTicker(){
+		List<String> tickers = stockSvc.grabFromSandPFromDatabase();
+		return "true";
 		
-		
+	}
+	
+	@RequestMapping(value ="/grab-all-new-ticker/")
+	@ResponseBody
+	public String grabAllNewsTicker(){
+		List<String> tickers = stockSvc.grabFromNewsFromDatabase();
 		return "true";
 		
 	}

@@ -27,10 +27,19 @@ public class StockDaoImpl extends JdbcDaoSupport implements StockDao {
 			public String mapRow(ResultSet result, int rowNum) throws SQLException {
 				return result.getString("ticker");
 			}
-			
-			
 		});
 		return stockList;
 	}
+	
+	public List<String> grabFromNewsFromDatabase(){
+		String sql = "Select * from new_stock";
+		List<String> stockList = this.getJdbcTemplate().query(sql, new RowMapper<String>(){
 
+			@Override
+			public String mapRow(ResultSet result, int rowNum) throws SQLException {
+				return result.getString("ticker");
+			}
+		});
+		return stockList;
+	}
 }

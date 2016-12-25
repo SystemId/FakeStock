@@ -5,6 +5,8 @@ import java.util.List;
 public interface StockSvc {
 	
 	public  List<String> grabFromSandPFromDatabase();
+	
+	public List<String> grabFromNewsFromDatabase();
 		
 	
 
