@@ -53,7 +53,7 @@ public class YahooWebController {
 	@RequestMapping(value = "/daily-options/{ticker}")
 	@ResponseBody
 	public String scrapeStockMarketOptions( @PathVariable String ticker) throws IOException  {
-		optionsScraper.scrape();
+		optionsScraper.scrape(ticker);
 		return "true";
 	}
 	

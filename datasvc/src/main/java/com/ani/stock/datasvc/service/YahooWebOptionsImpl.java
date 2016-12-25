@@ -32,50 +32,68 @@ public class YahooWebOptionsImpl {
 	}
 	
 
-	  public void scrape() throws IOException {
+	  public void scrape(String ticker) throws IOException {
 	        //seleniumGrab();
-	        OptionsDTO scrapePage = scrapePage("feye");
-	        springMongoDao.insertYahooOptions(scrapePage);
+	        scrapePage(ticker);
+	        
 	  }  
 	
-	public OptionsDTO scrapePage(String ticker) throws IOException {
-		OptionsDTO text = null;
+	public void scrapePage(String ticker) throws IOException {
 		try{
-			text = connectToHTML(ticker);
+			connectToHTML(ticker);
 		} catch(Exception e){
 			System.out.println(e);
 		}
 	
 		
-		return text;
+		
 	}
 
-	private OptionsDTO connectToHTML(String ticker)
+	private void connectToHTML(String ticker)
 			throws IOException {
 		String url = OPENSITE + ticker + HISTORY + ticker;
 		driver.get(url);
 		String pageSource = driver.getPageSource();
 		Document doc = Jsoup.parse(pageSource);
+		List<String> optionDates = this.grabAllOptionsDates(doc);
+		optionDates.remove(0);
+		this.scrapStockOptions(ticker, doc);
+		for(String optionDate : optionDates){
+			this.getLongTermOptions(optionDate, ticker, url);
+		}
+	
+	}
+
+
+	private void getLongTermOptions(String optionDate, String ticker, String url) {
+		String optionUrl = url + "&date=" + optionDate;
+		driver.get(optionUrl);
+		String pageSource = driver.getPageSource();
+		Document doc = Jsoup.parse(pageSource);
+		this.scrapStockOptions(ticker, doc);
+		
+	}
+
+
+	private void scrapStockOptions(String ticker, Document doc) {
 		OptionsDTO quote = new OptionsDTO();
 		String date = doc.select("span[class=Fz(s) Mend(10px)]").get(1).text();
 		quote.setTicker(ticker);
 		quote.setExpirationDate(date);
-		List<String> optionDates = this.grabAllOptionsDates(doc);
 		OptionsDTO optionsDTO = grabPagedCallOptions(ticker, doc, quote);
 		OptionsDTO optionsDTO2 = grabPagedPutOptions(ticker, doc, optionsDTO);
-		return optionsDTO2;
+		springMongoDao.insertYahooOptions(optionsDTO2);
 	}
 
 
 	private OptionsDTO grabPagedCallOptions(String ticker, Document doc, OptionsDTO quote) {
-		
 		StockOption option = null;
-	
+		
 		Element div = doc.select("table[class=calls table-bordered W(100%) Pos(r) Bd(0) Pt(0) list-options]").first();
+		if(div !=null){
 		for(Element tr: div.select("tr")){
 			int i = 0;
 			for(Element td :tr.select("td")){
-				
 				if(option == null){
 					option = new StockOption();
 				}
@@ -107,14 +125,15 @@ public class YahooWebOptionsImpl {
 				i++;
 			}
 		}
+		}
 		return quote;
 	}
 
 	private OptionsDTO grabPagedPutOptions(String ticker, Document doc,  OptionsDTO quote) {
 		
 		StockOption option = null;
-		
 		Element div = doc.select("table[class=puts table-bordered W(100%) Pos(r) list-options]").first();
+		if(div !=null){
 		for(Element tr: div.select("tr")){
 			int i = 0;
 			for(Element td :tr.select("td")){
@@ -149,6 +168,7 @@ public class YahooWebOptionsImpl {
 				System.out.println(scrapeText);
 				i++;
 			}
+		}
 		}
 		return quote;
 	}
