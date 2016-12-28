@@ -19,9 +19,20 @@ public class StockSvcImpl implements StockSvc {
 		return this.stockDao.grabFromSandPFromDatabase();
 	}
 	
+	
+	
 	@Override
 	public List<String> grabFromNewsFromDatabase(){
 		return this.stockDao.grabFromNewsFromDatabase();
+	}
+
+
+
+	@Override
+	public List<String> grabLimitFromSandPFromDatabase(int limit,
+			int offset) {
+		
+		return this.stockDao.grabLimitFromSandPFromDatabase(limit, offset);
 	}
 
 }

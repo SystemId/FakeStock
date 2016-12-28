@@ -9,5 +9,7 @@ public interface StockDao {
 	public  List<String> grabFromSandPFromDatabase();
 	
 	public List<String> grabFromNewsFromDatabase();
+	
+	public List<String> grabLimitFromSandPFromDatabase(int limit, int offset);
 
 }

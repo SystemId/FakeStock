@@ -63,16 +63,34 @@ public class YahooWebController {
 		return "true";
 	}
 	
-	@RequestMapping(value ="/grab-all-sp-ticker/")
+	@RequestMapping(value ="/grab-all-sp-ticker/{startList}")
 	@ResponseBody
-	public String grabAllSPTicker() throws IOException{
+	public String grabAllSPTicker(@PathVariable int startList) throws IOException{
 		List<String> tickers = stockSvc.grabFromSandPFromDatabase();
+		tickers.subList(0, startList).clear();;
 		for(String ticker: tickers){
 			optionsScraper.scrape(ticker);           
 			System.out.println(ticker);
 		}
 		return "true";
 		
+	}
+	
+	@RequestMapping(value ="/grab-all-sp-ticker/{startList}/{stopList}")
+	@ResponseBody
+	public String grabSPRange(@PathVariable int startList, @PathVariable int stopList) throws IOException{
+		scrapeSPRange(startList, stopList);
+		return "true";
+		
+	}
+
+
+	public void scrapeSPRange(int startList, int stopList) throws IOException {
+		List<String> tickers = stockSvc.grabLimitFromSandPFromDatabase(startList, stopList);
+		for(String ticker: tickers){
+			optionsScraper.scrape(ticker);           
+			System.out.println(ticker);
+		}
 	}
 	
 	@RequestMapping(value ="/grab-all-new-ticker/")

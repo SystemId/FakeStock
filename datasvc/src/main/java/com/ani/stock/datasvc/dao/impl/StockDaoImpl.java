@@ -1,5 +1,6 @@
 package com.ani.stock.datasvc.dao.impl;
 
+import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -22,6 +23,19 @@ public class StockDaoImpl extends JdbcDaoSupport implements StockDao {
 	public List<String> grabFromSandPFromDatabase(){
 		String sql = "Select * from SP_Stock";
 		List<String> stockList = this.getJdbcTemplate().query(sql, new RowMapper<String>(){
+
+			@Override
+			public String mapRow(ResultSet result, int rowNum) throws SQLException {
+				return result.getString("ticker");
+			}
+		});
+		return stockList;
+	}
+	
+	public List<String> grabLimitFromSandPFromDatabase(int limit, int offset){
+		String sql = "Select * from SP_Stock limit ? offset ?";
+		
+		List<String> stockList = this.getJdbcTemplate().query(sql, new Object[] {limit, offset}, new RowMapper<String>(){
 
 			@Override
 			public String mapRow(ResultSet result, int rowNum) throws SQLException {
