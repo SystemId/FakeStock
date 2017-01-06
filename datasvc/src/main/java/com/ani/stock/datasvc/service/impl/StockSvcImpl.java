@@ -34,5 +34,4 @@ public class StockSvcImpl implements StockSvc {
 		
 		return this.stockDao.grabLimitFromSandPFromDatabase(limit, offset);
 	}
-
 }

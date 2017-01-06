@@ -17,7 +17,7 @@ import com.ani.stock.spring.mongodb.SpringMongoDao;
 
 public class YahooWebOptionsImpl {
 	
-	static WebDriver driver;
+
 	
 	@Autowired
 	SpringMongoDao springMongoDao;
@@ -25,15 +25,17 @@ public class YahooWebOptionsImpl {
 	public static final String OPENSITE = "https://finance.yahoo.com/quote/"; 
 	public static final String HISTORY = "/options?p=";
 	
+	static WebDriver driver;
+	
 	public void init(){
-		String driverlocation = "/Users/minimac/apps/development/geckodriver";
-		System.setProperty("webdriver.gecko.driver", driverlocation);
-		driver = new MarionetteDriver();
+		
+	
 	}
 	
 
-	  public void scrape(String ticker) throws IOException {
+	  public void scrape(String ticker, WebDriver driver) throws IOException {
 	        //seleniumGrab();
+		    this.driver = driver;
 	        scrapePage(ticker);
 	        
 	  }  
@@ -58,10 +60,11 @@ public class YahooWebOptionsImpl {
 		List<String> optionDates = this.grabAllOptionsDates(doc);
 		optionDates.remove(0);
 		this.scrapStockOptions(ticker, doc);
-		for(String optionDate : optionDates){
-			this.getLongTermOptions(optionDate, ticker, url);
+		if(optionDates != null){
+			for(String optionDate : optionDates){
+				this.getLongTermOptions(optionDate, ticker, url);
+			}
 		}
-	
 	}
 
 
@@ -70,6 +73,7 @@ public class YahooWebOptionsImpl {
 		driver.get(optionUrl);
 		String pageSource = driver.getPageSource();
 		Document doc = Jsoup.parse(pageSource);
+		
 		this.scrapStockOptions(ticker, doc);
 		
 	}
@@ -91,6 +95,21 @@ public class YahooWebOptionsImpl {
 		
 		Element div = doc.select("table[class=calls table-bordered W(100%) Pos(r) Bd(0) Pt(0) list-options]").first();
 		if(div !=null){
+			option = callsForLoop(quote, option, div);
+		} else {
+			
+			driver.navigate().refresh();
+			Element div2 = doc.select("table[class=calls table-bordered W(100%) Pos(r) Bd(0) Pt(0) list-options]").first();
+			if(div2 != null){
+				option = callsForLoop(quote, option, div2);
+			}
+		}
+		return quote;
+	}
+
+
+	private StockOption callsForLoop(OptionsDTO quote, StockOption option,
+			Element div) {
 		for(Element tr: div.select("tr")){
 			int i = 0;
 			for(Element td :tr.select("td")){
@@ -125,8 +144,7 @@ public class YahooWebOptionsImpl {
 				i++;
 			}
 		}
-		}
-		return quote;
+		return option;
 	}
 
 	private OptionsDTO grabPagedPutOptions(String ticker, Document doc,  OptionsDTO quote) {
@@ -134,6 +152,21 @@ public class YahooWebOptionsImpl {
 		StockOption option = null;
 		Element div = doc.select("table[class=puts table-bordered W(100%) Pos(r) list-options]").first();
 		if(div !=null){
+			option = putsForLoop(quote, option, div);
+		}else {
+			
+			driver.navigate().refresh();
+			Element div2 = doc.select("table[class=puts table-bordered W(100%) Pos(r) list-options]").first();
+			if(div2 != null){
+				option = callsForLoop(quote, option, div2);
+			}
+		}
+		return quote;
+	}
+
+
+	private StockOption putsForLoop(OptionsDTO quote, StockOption option,
+			Element div) {
 		for(Element tr: div.select("tr")){
 			int i = 0;
 			for(Element td :tr.select("td")){
@@ -169,16 +202,17 @@ public class YahooWebOptionsImpl {
 				i++;
 			}
 		}
-		}
-		return quote;
+		return option;
 	}
 
 	private List<String> grabAllOptionsDates(Document doc) {
 		List<String> optionValues = new ArrayList<String>();
 		Element div = doc.select("div[class=Fl(start) Pend(18px) option-contract-control drop-down-selector]").first();
-		for(Element option: div.select("option")){
-			String attr = option.attr("value");
-			optionValues.add(attr);
+		if(div != null){
+			for(Element option: div.select("option")){
+				String attr = option.attr("value");
+				optionValues.add(attr);
+			}
 		}
 		return optionValues;
 	}

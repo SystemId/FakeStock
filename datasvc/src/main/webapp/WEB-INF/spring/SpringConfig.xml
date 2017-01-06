@@ -83,7 +83,7 @@
 	<task:scheduler id="cronScheduler"/>
 	
 	<task:scheduled-tasks scheduler="cronScheduler">
-    	<task:scheduled ref="cronTaskExecuter" method="callStockService" cron="*/30 * * * * ?"/>
+    	<task:scheduled ref="cronTaskExecuter" method="callStockService" cron="0 0/8 16-23 * * MON-FRI"/>
 	</task:scheduled-tasks>
 
 

@@ -27,9 +27,9 @@ public class YahooWebScraperImpl {
 	SpringMongoDao springDao;
 	
 	public void init(){
-		String driverlocation = "/Users/minimac/apps/development/geckodriver";
-		System.setProperty("webdriver.gecko.driver", driverlocation);
-		driver = new MarionetteDriver();
+//		String driverlocation = "/Users/minimac/apps/development/geckodriver";
+//		System.setProperty("webdriver.gecko.driver", driverlocation);
+//		driver = new MarionetteDriver();
 	}
 
 
