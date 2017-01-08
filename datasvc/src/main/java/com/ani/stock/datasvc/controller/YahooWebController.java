@@ -74,8 +74,7 @@ public class YahooWebController {
 	@RequestMapping(value ="/grab-all-sp-ticker/{startList}")
 	@ResponseBody
 	public String grabAllSPTicker(@PathVariable int startList) throws IOException{
-	
-		
+		this.createDriver();
 		List<String> tickers = stockSvc.grabFromSandPFromDatabase();
 		tickers.subList(0, startList).clear();;
 		for(String ticker: tickers){
@@ -86,23 +85,24 @@ public class YahooWebController {
 		
 	}
 	
-	@RequestMapping(value ="/grab-all-sp-ticker/{startList}/{stopList}")
+	@RequestMapping(value ="/grab-all-sp-ticker/{limit}/{offset}")
 	@ResponseBody
-	public String grabSPRange(@PathVariable int startList, @PathVariable int stopList) throws IOException{
-		scrapeSPRange(startList, stopList);
+	public String grabSPRange(@PathVariable int limit, @PathVariable int offset) throws IOException{
+		scrapeSPRange(limit, offset);
 		return "true";
 		
 	}
 
 
-	public void scrapeSPRange(int startList, int stopList) throws IOException {
+	public void scrapeSPRange(int limit, int offset) throws IOException {
 		this.createDriver();
-		List<String> tickers = stockSvc.grabLimitFromSandPFromDatabase(startList, stopList);
+		List<String> tickers = stockSvc.grabLimitFromSandPFromDatabase(limit, offset);
 		for(String ticker: tickers){
 			optionsScraper.scrape(ticker, driver);           
 			System.out.println(ticker);
 		}
 		driver.close();
+		driver.quit();
 	}
 	
 	@RequestMapping(value ="/grab-all-new-ticker/")

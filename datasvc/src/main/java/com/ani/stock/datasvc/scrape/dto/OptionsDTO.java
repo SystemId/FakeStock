@@ -1,5 +1,6 @@
 package com.ani.stock.datasvc.scrape.dto;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -17,7 +18,7 @@ public class OptionsDTO {
 	private String ticker;
 	private List<StockOption> callOptions = new ArrayList<StockOption>();
 	private List<StockOption> putOptions = new ArrayList<StockOption>();
-	private Calendar today = Calendar.getInstance();
+	private String today;
 	private String expirationDate;
 	
 
@@ -27,10 +28,15 @@ public class OptionsDTO {
 	public void setExpirationDate(String expirationDate) {
 		this.expirationDate = expirationDate;
 	}
-	public Calendar getToday() {
-		return today;
+	public String getToday() {
+		Calendar now = Calendar.getInstance();
+		now.add(Calendar.DATE, 1);
+		SimpleDateFormat format1 = new SimpleDateFormat("MM-dd-yyyy");
+		String format = format1.format(now.getTime());
+		return format;
 	}
-	public void setToday(Calendar today) {
+	
+	public void setToday(String today) {
 		this.today = today;
 	}
 	public String getTicker() {
