@@ -58,11 +58,41 @@ public class YahooWebController {
 	//This method is designed to scrap Yahoo finance page
 	@RequestMapping(value = "/daily-tick-new/{ticker}")
 	@ResponseBody
-	public String scrapeStockMarketData( @PathVariable String ticker) throws IOException  {
-		webScraper.scrape(ticker);
+	public String scrapeStockMarketData(@PathVariable String ticker) throws IOException  {
+		this.createDriver();
+		webScraper.scrape(ticker, driver);
 		return "true";
 	}
 	
+	@RequestMapping(value = "/daily-tick-sp/{limit}/{offset}")
+	@ResponseBody
+	public String scrapeSPStockMarketData(@PathVariable int limit, @PathVariable int offset) throws IOException  {
+		scrapeSPStockMarketStuff(limit, offset);
+		return "true";
+	}
+
+
+	public void scrapeSPStockMarketStuff(int limit, int offset){
+		this.createDriver();
+		List<String> tickers = stockSvc.grabLimitFromSandPFromDatabase(limit, offset);
+		for(String ticker: tickers){
+			try {
+				webScraper.scrape(ticker, driver);
+			} catch (IOException e) {
+				driver.close();
+				driver.quit();
+				this.createDriver();
+				try {
+					webScraper.scrape(ticker, driver);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		}
+		driver.close();
+		driver.quit();
+	}
 	
 	@RequestMapping(value = "/daily-options/{ticker}")
 	@ResponseBody
@@ -105,12 +135,11 @@ public class YahooWebController {
 		driver.quit();
 	}
 	
-	@RequestMapping(value ="/grab-all-new-ticker/")
-	@ResponseBody
-	public String grabAllNewsTicker(){
-		List<String> tickers = stockSvc.grabFromNewsFromDatabase();
-		return "true";
-		
-	}
+//	@RequestMapping(value ="/grab-all-new-ticker/")
+//	@ResponseBody
+//	public String grabAllNewsTicker(){
+//		List<String> tickers = stockSvc.grabFromNewsFromDatabase();
+//		return "true";
+//	}
 
 }

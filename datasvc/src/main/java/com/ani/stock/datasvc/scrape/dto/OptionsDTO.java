@@ -29,15 +29,15 @@ public class OptionsDTO {
 		this.expirationDate = expirationDate;
 	}
 	public String getToday() {
+		return today;
+	}
+	
+	public void setToday() {
 		Calendar now = Calendar.getInstance();
 		now.add(Calendar.DATE, 1);
 		SimpleDateFormat format1 = new SimpleDateFormat("MM-dd-yyyy");
 		String format = format1.format(now.getTime());
-		return format;
-	}
-	
-	public void setToday(String today) {
-		this.today = today;
+		this.today = format;
 	}
 	public String getTicker() {
 		return ticker;

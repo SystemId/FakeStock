@@ -84,6 +84,7 @@ public class YahooWebOptionsImpl {
 		String date = doc.select("span[class=Fz(s) Mend(10px)]").get(1).text();
 		quote.setTicker(ticker);
 		quote.setExpirationDate(date);
+		quote.setToday();
 		OptionsDTO optionsDTO = grabPagedCallOptions(ticker, doc, quote);
 		OptionsDTO optionsDTO2 = grabPagedPutOptions(ticker, doc, optionsDTO);
 		springMongoDao.insertYahooOptions(optionsDTO2);

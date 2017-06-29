@@ -27,18 +27,17 @@ public class YahooWebScraperImpl {
 	SpringMongoDao springDao;
 	
 	public void init(){
-//		String driverlocation = "/Users/minimac/apps/development/geckodriver";
-//		System.setProperty("webdriver.gecko.driver", driverlocation);
-//		driver = new MarionetteDriver();
+
 	}
 
 
 	public static final String OPENSITE = "https://finance.yahoo.com/quote/"; 
 	public static final String HISTORY = "/history?p=";
 	
-	  public void scrape(String ticker) throws IOException {
+	  public void scrape(String ticker, WebDriver driver) throws IOException {
 	        //seleniumGrab();
-	        scrapePage(ticker);
+		   this.driver = driver;
+	       scrapePage(ticker);
 	  }  
 	
 	public YahooHistoricalQuote scrapePage(String ticker) throws IOException {
